@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jp.co.SpringBBS.mapper.Mapper">
+
+<resultMap id="UserResult" type="jp.co.SpringBBS.entity.UserManagement">
+		<result column="id" property="id" />
+		<result column="login_id" property="loginId" />
+		<result column="name" property="name" />
+		<result column="branch_name" property="branchName" />
+		<result column="position_name" property="positionName" />
+		<result column="user_state" property="userState" />
+</resultMap>
+
+<resultMap id="UserData" type="jp.co.SpringBBS.entity.User">
+		<result column="id" property="id" />
+		<result column="login_id" property="loginId" />
+		<result column="password" property="password" />
+		<result column="name" property="name" />
+		<result column="branch_id" property="branch" />
+		<result column="position_id" property="position" />
+		<result column="update_date" property="updateDate" />
+</resultMap>
+
+<select id="getUserData" resultMap="UserData" parameterType="int">
+	select id, login_id, password, name, branch_id, position_id, update_date
+	from users
+	where id = #{id}
+</select>
+
+<select id="getUserList" resultMap="UserResult">
+		select users.id, users.login_id, users.name, branches.branch_name, positions.position_name, users.user_state
+		from users inner join positions on users.position_id = positions.id inner join
+		branches on users.branch_id = branches.id ORDER BY users.branch_id ASC, users.position_id ASC;
+</select>
+
+<update id="getUserData">
+	update users set loginId = #{login_id}, name = #{name}, branch = #{branch_id}, position = #{position_id} where id = #{id}
+	</update>
+</mapper>
